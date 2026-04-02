@@ -1,0 +1,22 @@
+import pandas as pd
+def preprocess_transactions(df):
+    print(f"\n Staring preprocessing..")
+
+    #drop rows where customer id is missing 
+    df=df.dropna(subset=['Customer ID'])
+
+    #remove invalid transactions 
+    df=df[(df['Quantity']>0) & (df['Price']>0)]
+
+    #remove duplicate values
+    df=df.drop_duplicates()
+
+    #convert data column
+    df['InvoiceDate']=pd.to_datetime(df['InvoiceDate'])
+
+    #create total transaction values
+    df['TotalPrice']=df['Quantity']*df['Price']
+
+    print(f"Data cleaned. Remaining records: {df.shape[0]}")
+    
+    return df
